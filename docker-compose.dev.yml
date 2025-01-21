@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '5001:5001'
+    environment:
+      - AWS_REGION=us-east-1
+      - DYNAMODB_ENDPOINT=http://dynamodb:8000
+      - NODE_ENV=development
+    depends_on:
+      - dynamodb
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+  dynamodb:
+    image: amazon/dynamodb-local
+    ports:
+      - '8000:8000'
+    volumes:
+      - dynamodb_data:/data
+
+volumes:
+  dynamodb_data:
