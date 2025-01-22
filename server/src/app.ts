@@ -1,5 +1,6 @@
 import express from 'express';
 import healthRouter from './routes/health';
+import scheduleRouter from './routes/schedules';
 import cors from 'cors';
 import path from 'path';
 
@@ -9,6 +10,11 @@ if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: 'http://localhost:5173' })); // Allow Vite frontend
 }
 
+// Routes
+
+app.use('/api', healthRouter);
+app.use('/api/schedules', scheduleRouter);
+
 // Serve static files from the React app
 
 if (process.env.NODE_ENV === 'production') {
@@ -17,8 +23,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '../client/dist/index.html'));
   });
 }
-
-app.use('/api', healthRouter);
 
 app.listen(5001, () => {
   console.log('Server running on http://localhost:5001');
