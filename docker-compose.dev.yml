@@ -15,7 +15,6 @@ services:
       - dynamodb
     volumes:
       - ./server:/usr/src/app
-      - /usr/src/app/node_modules
   dynamodb:
     image: amazon/dynamodb-local
     ports:
