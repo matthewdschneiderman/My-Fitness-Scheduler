@@ -1,5 +1,4 @@
 import express from 'express';
-import healthRouter from './routes/health';
 import scheduleRouter from './routes/schedules';
 import cors from 'cors';
 import path from 'path';
@@ -9,13 +8,15 @@ const app = express();
 if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: 'http://localhost:5173' })); // Allow Vite frontend
 }
+app.use(express.json());
 
 // Routes
 
-app.use('/api', healthRouter);
 app.use('/api/schedules', scheduleRouter);
 
 // Serve static files from the React app
+
+// Middleware to parse JSON
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/dist')));

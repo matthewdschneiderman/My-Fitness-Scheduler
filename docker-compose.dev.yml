@@ -9,8 +9,10 @@ services:
       - '5001:5001'
     environment:
       - AWS_REGION=us-east-1
-      - DYNAMODB_ENDPOINT=http://dynamodb:8000
+      - DYNAMODB_ENDPOINT=http://localhost:8000
       - NODE_ENV=development
+      - AWS_ACCESS_KEY_ID=fakeMyKeyId
+      - AWS_SECRET_ACCESS_KEY=fakeSecretAccessKey
     depends_on:
       - dynamodb
     volumes:
@@ -20,7 +22,7 @@ services:
     ports:
       - '8000:8000'
     volumes:
-      - dynamodb_data:/data
+      - dynamodb_data:/home/dynamodblocal/data # Persist data in a Docker volume
 
 volumes:
   dynamodb_data:
