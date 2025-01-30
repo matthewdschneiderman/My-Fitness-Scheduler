@@ -28,27 +28,30 @@ const DateDisplay = styled.p`
   margin: 0;
 `;
 
-const DateRangeSelector = ({
-  startDate = '1/1/25',
-  endDate = '1/2/25',
-  onPrev = null,
-  onNext = null,
-}) => (
-  <DateSelector>
-    <ArrowButton
-      onClick={onPrev}
-      aria-label='Previous Date'
-    >
-      &lt;
-    </ArrowButton>
-    <DateDisplay>{`${startDate} – ${endDate}`}</DateDisplay>
-    <ArrowButton
-      onClick={onNext}
-      aria-label='Next Date'
-    >
-      &gt;
-    </ArrowButton>
-  </DateSelector>
-);
+interface DateRangeSelectorProps {
+  startDate: string;
+  onPrev: () => void;
+  onNext: () => void;
+}
+
+const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({ startDate, onPrev, onNext }) => {
+  return (
+    <DateSelector>
+      <ArrowButton
+        onClick={onPrev}
+        aria-label='Previous Date'
+      >
+        &lt;
+      </ArrowButton>
+      <DateDisplay>{`${startDate}`}</DateDisplay>
+      <ArrowButton
+        aria-label='Next Date'
+        onClick={onNext}
+      >
+        &gt;
+      </ArrowButton>
+    </DateSelector>
+  );
+};
 
 export default DateRangeSelector;

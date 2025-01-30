@@ -10,7 +10,7 @@ function App() {
         element={<NavBar />}
       >
         <Route
-          path='schedule'
+          path='schedules'
           element={<SchedulePage />}
         />
       </Route>

@@ -7,6 +7,7 @@ const NavBarContainer = styled.nav`
   background-color: ${({ theme }) => theme.colors.primary};
   padding: 16px 32px;
   color: white;
+  padding: 16px 5%;
 `;
 
 const Logo = styled.div`
