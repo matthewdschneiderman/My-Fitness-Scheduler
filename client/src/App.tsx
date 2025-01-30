@@ -1,10 +1,20 @@
-import ScheduleList from './components/ScheduleList';
+import NavBar from './components/NavBar';
+import SchedulePage from './pages/SchedulePage';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <>
-      <ScheduleList />;
-    </>
+    <Routes>
+      <Route
+        path='/'
+        element={<NavBar />}
+      >
+        <Route
+          path='schedule'
+          element={<SchedulePage />}
+        />
+      </Route>
+    </Routes>
   );
 }
 
