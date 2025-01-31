@@ -1,108 +1,74 @@
 import express, { Request, Response } from 'express';
-import { FitnessSchedule, NewScheduleBody } from '../types/schedule'; // Import the interface
-import { v4 as uuidv4 } from 'uuid';
-import { validateScheduleInput } from '../utils/validation';
+import Schedule from '../models/schedule';
 const router = express.Router();
 
-// Hardcoded list of schedules for now
-const schedules: FitnessSchedule[] = [
-  {
-    id: '1',
-    title: 'Morning Yoga',
-    description: 'Relaxing morning yoga session',
-    date: '2025-01-22',
-    time: '07:00',
-  },
-  {
-    id: '2',
-    title: 'Evening Run',
-    date: '2025-01-22',
-    time: '18:00',
-  },
-];
 // GET /api/schedules - Fetch all schedules
-router.get('/', (req, res) => {
-  res.json(schedules); // Send the list of schedules as a response
+router.get('/', async (req, res) => {
+  try {
+    const schedules = await Schedule.find();
+    res.json(schedules);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
-router.get(
-  '/:id',
-  (req: Request<{ id: string }>, res: Response<FitnessSchedule | { error: string }>) => {
-    const { id } = req.params;
-    const schedule = schedules.find((s) => id === s.id);
-
+router.get('/:id', async (req: Request<{ id: string }>, res: Response) => {
+  const { id } = req.params;
+  try {
+    const schedule = await Schedule.findById(id);
     if (!schedule) {
       res.status(404).json({ error: 'Schedule not found' });
       return;
     }
-
     res.json(schedule);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-);
+});
 
-router.post(
-  '/',
-  (req: Request<{}, {}, NewScheduleBody>, res: Response<FitnessSchedule | { error: string }>) => {
-    console.log(req.body);
-    const validationError = validateScheduleInput(req.body);
-    if (validationError) {
-      res.status(400).json({ error: validationError });
-      return;
-    }
-
-    const newSchedule: FitnessSchedule = {
-      id: uuidv4(),
-      ...req.body,
-    };
-    schedules.push(newSchedule);
+router.post('/', async (req: Request, res: Response) => {
+  try {
+    const newSchedule = new Schedule(req.body);
+    await newSchedule.save();
 
     res.status(201).json(newSchedule);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-);
+});
 
-router.put(
-  '/:id',
-  (
-    req: Request<{ id: string }, {}, Partial<FitnessSchedule>>,
-    res: Response<FitnessSchedule | { error: string }>
-  ) => {
-    const { id } = req.params;
-    const { title, description, date, time } = req.body;
-    const schedule = schedules.find((s) => s.id === id);
+router.put('/:id', async (req: Request<{ id: string }>, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const schedule = await Schedule.findByIdAndUpdate(id, req.body);
 
     if (!schedule) {
       res.status(404).json({ error: 'Schedule not found' });
       return;
     }
-
-    const validationError = validateScheduleInput({ title, date, time });
-    if (validationError) {
-      res.status(400).json({ error: validationError });
-    }
-
-    if (title) schedule.title = title;
-    if (description) schedule.description = description;
-    if (date) schedule.date = date;
-    if (time) schedule.time = time;
-
     res.json(schedule);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-);
+});
 
 router.delete(
   '/:id',
-  (req: Request<{ id: string }>, res: Response<{ message: string } | { error: string }>) => {
+  async (req: Request<{ id: string }>, res: Response<{ message: string } | { error: string }>) => {
     const { id } = req.params;
 
-    const scheduleIndex = schedules.findIndex((s) => s.id === id);
+    try {
+      const schedule = await Schedule.findByIdAndDelete(id);
+      if (!schedule) {
+        res.status(404).json({ error: 'Schedule not found' });
+        return;
+      }
 
-    if (scheduleIndex === -1) {
-      res.status(404).json({ error: 'Schedule not found' });
-      return;
+      res.json({ message: 'Schedule deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-
-    schedules.splice(scheduleIndex, 1);
-    res.json({ message: 'Schedule deleted successfully' });
   }
 );
 

@@ -2,6 +2,7 @@ import express from 'express';
 import scheduleRouter from './routes/schedules';
 import cors from 'cors';
 import path from 'path';
+import connectDB from './config/db';
 
 const app = express();
 
@@ -9,6 +10,8 @@ if (process.env.NODE_ENV === 'development') {
   app.use(cors({ origin: 'http://localhost:5173' })); // Allow Vite frontend
 }
 app.use(express.json());
+
+connectDB();
 
 // Routes
 

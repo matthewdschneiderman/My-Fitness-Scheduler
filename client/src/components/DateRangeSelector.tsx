@@ -5,6 +5,7 @@ const DateSelector = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 16px;
+  max-width: 300px;
 `;
 
 const ArrowButton = styled.button`

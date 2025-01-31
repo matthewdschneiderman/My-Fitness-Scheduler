@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "aws-sdk": "^2.1692.0"
+    "aws-sdk": "^2.1692.0",
+    "mongoose": "^8.9.5"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.11.96"
   }
 }
