@@ -1,10 +1,40 @@
 import DateRangeSelector from '../components/DateRangeSelector';
 import FilterSection from '../components/FilterSection';
-import ScheduleList from '../components/ScheduleList';
-import { useState } from 'react';
+import FitnessClassList from '../components/FitnessClassList';
+import { useState, useEffect } from 'react';
+import { getFitnessClasses } from '../api/fitnessClass';
+import { FitnessClass } from '../types/fitnessClass';
+
+interface Filters {
+  date: Date;
+  selectedLocation: string;
+  selectedInstructor: string;
+  selectedClassType: string;
+}
 
 const SchedulePage = () => {
   const [startDate, setStartDate] = useState(new Date());
+  const [fitnessClasses, setFitnessClasses] = useState<FitnessClass[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState<Filters>({
+    date: startDate,
+    selectedLocation: '',
+    selectedInstructor: '',
+    selectedClassType: '',
+  });
+
+  useEffect(() => {
+    const fetchSchedules = async () => {
+      try {
+        const data = await getFitnessClasses();
+        setFitnessClasses(data);
+      } catch {
+        setError('Unable to fetch Schedules');
+      }
+    };
+
+    fetchSchedules();
+  }, [filters]);
 
   const handlePrev = () => {
     setStartDate((prev) => {
@@ -22,15 +52,28 @@ const SchedulePage = () => {
     });
   };
 
+  useEffect(() => {
+    console.log('data changed');
+  }, [startDate]);
+
   return (
     <>
-      <FilterSection />
+      <FilterSection
+        selectedLocation={filters.selectedLocation}
+        selectedClassType={filters.selectedClassType}
+        selectedInstructor={filters.selectedInstructor}
+        onFilterChange={(e) => setFilters({ ...filters, [e.target.name]: e.target.value })}
+      />
       <DateRangeSelector
         startDate={startDate.toDateString()}
         onPrev={handlePrev}
         onNext={handleNext}
       />
-      <ScheduleList />;
+      <FitnessClassList
+        schedules={fitnessClasses}
+        error={error}
+      />
+      ;
     </>
   );
 };

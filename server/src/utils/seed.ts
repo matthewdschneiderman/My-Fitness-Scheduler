@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Schedule from '../models/schedule';
+import Schedule from '../models/fitnessClass';
 import dotenv from 'dotenv';
 
 // Load environment variables (if using a `.env` file)

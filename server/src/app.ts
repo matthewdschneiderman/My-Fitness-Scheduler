@@ -1,5 +1,5 @@
 import express from 'express';
-import scheduleRouter from './routes/schedules';
+import fitnessClassRouter from './routes/fitnessClasses';
 import cors from 'cors';
 import path from 'path';
 import connectDB from './config/db';
@@ -15,7 +15,7 @@ connectDB();
 
 // Routes
 
-app.use('/api/schedules', scheduleRouter);
+app.use('/api/fitnessClasses', fitnessClassRouter);
 
 // Serve static files from the React app
 

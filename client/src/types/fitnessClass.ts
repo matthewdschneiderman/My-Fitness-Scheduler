@@ -1,4 +1,4 @@
-export interface Schedule {
+export interface FitnessClass {
   id: string; // A unique identifier
   title: string; // Title of the schedule (e.g., "Morning Run")
   description?: string; // Optional description

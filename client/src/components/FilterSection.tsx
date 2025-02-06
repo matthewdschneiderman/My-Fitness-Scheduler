@@ -8,16 +8,48 @@ const Dropdown = styled.select`
   font-size: 1rem;
 `;
 
-const FilterSection = () => (
+interface FilterSectionProps {
+  selectedLocation: string;
+  selectedClassType: string;
+  selectedInstructor: string;
+  onFilterChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}
+
+const FilterSection: React.FC<FilterSectionProps> = ({
+  selectedLocation,
+  selectedClassType,
+  selectedInstructor,
+  onFilterChange,
+}) => (
   <div>
-    <Dropdown>
-      <option>Locations</option>
+    <Dropdown
+      value={selectedLocation}
+      onChange={onFilterChange}
+      name='selectedLocation'
+    >
+      <option value=''>Locations</option>
+      <option value='Chelsea'>Chelsea</option>
+      <option value='Flatiron'>Flatiron</option>
+      <option value='Brookyln'>Brookyln</option>
+      <option value='Stamford, Ct'>Stamford, Ct</option>
     </Dropdown>{' '}
-    <Dropdown>
-      <option>Class Types</option>
+    <Dropdown
+      value={selectedClassType}
+      name='selectedClassType'
+      onChange={onFilterChange}
+    >
+      <option value=''>Select Class Type</option>
+      <option value='type1'>Class Type 1</option>
+      <option value='type2'>Class Type 2</option>
     </Dropdown>{' '}
-    <Dropdown>
-      <option>Instructors</option>
+    <Dropdown
+      value={selectedInstructor}
+      onChange={onFilterChange}
+      name='selectedInstructor'
+    >
+      <option value=''>Select Instructor</option>
+      <option value='instructor1'>Instructor 1</option>
+      <option value='instructor2'>Instructor 2</option>
     </Dropdown>
   </div>
 );
